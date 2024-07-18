@@ -1,6 +1,7 @@
+from curses.ascii import isdigit
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
-from models import Book, Publisher, Sale, Shop, create_tables
+from models import Book, Publisher, Sale, Shop, Stock, create_tables
 
 DSN = 'postgresql://postgres:LSamovar69@localhost:5432/HW_db'
 
@@ -10,15 +11,23 @@ session = Session()
 
 create_tables(engine)
 
-name = input("Введите имя издателя:")
+def get_shops(name):
+    sales = session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).select_from(Shop).\
+    join(Stock).\
+    join(Book).\
+    join(Publisher).\
+    join(Sale)
+    if name is isdigit:
+        pub = sales.filter(Publisher.id == name).all()
+    else:
+        pub = sales.filter(Publisher.name == name).all()
 
-sales = session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).filter(Publisher.name == name).all()
+    for Book.title, Shop.name, Sale.price, Sale.date_sale in pub:
+        print(f"Издание: {Book.title}, Магазин: {Shop.name}, Цена: {Sale.price}, Дата продажи: {Sale.date_sale}")
 
 
-if sales:
-    for sale in sales:
-        print(f"{sale.title}, {sale.name}, {sale.price}, {sale.date_sale}")
-else:
-    print(f"Издатель с именем {name} не найден")
+if __name__ == "__main__":
+    name = input('Введите имя или айди публициста:')
+    get_shops(name)
 
 session.close()
