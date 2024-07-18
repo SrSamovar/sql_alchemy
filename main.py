@@ -17,13 +17,13 @@ def get_shops(name):
     join(Book).\
     join(Publisher).\
     join(Sale)
-    if name is isdigit:
-        pub = sales.filter(Publisher.id == name).all()
+    if name is isdigit():
+        pub = sales.filter(Publisher.id == int(name)).all()
     else:
         pub = sales.filter(Publisher.name == name).all()
 
-    for Book.title, Shop.name, Sale.price, Sale.date_sale in pub:
-        print(f"Издание: {Book.title}, Магазин: {Shop.name}, Цена: {Sale.price}, Дата продажи: {Sale.date_sale}")
+    for title, shop_name, sale_price, data_sale in pub:
+        print(f'Издание: {title},название магазина: {shop_name},цена: {sale_price},дата продажи: {data_sale}')
 
 
 if __name__ == "__main__":
